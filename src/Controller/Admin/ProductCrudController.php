@@ -2,13 +2,16 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Product;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use App\Enum\HubsEnum;
+use App\Entity\Product;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use Vich\UploaderBundle\Form\Type\VichImageType;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+
 
 class ProductCrudController extends AbstractCrudController
 {
@@ -55,7 +58,15 @@ class ProductCrudController extends AbstractCrudController
             TextField::new('title'),
             TextareaField::new('descr'),
             TextField::new('uniqueName'),
-            ChoiceField::new('hubTitle')->setChoices($titles)
+            ChoiceField::new('hubTitle')->setChoices($titles),
+            ImageField::new('image', 'Product image')
+                ->setBasePath($this->getParameter('app.path.product_images'))
+                ->onlyOnIndex(),
+            TextareaField::new('imageFile','Product Image')
+                ->setFormType(VichImageType::class)
+                ->setTranslationParameters(['form.label.delete'=>'Delete'])
+                ->hideOnIndex()
+            
         ];
     }
     
